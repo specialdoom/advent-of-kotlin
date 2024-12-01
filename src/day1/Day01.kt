@@ -11,6 +11,7 @@ fun main() {
             first to second
         }.unzip()
     }
+
     fun part1(input: List<String>) {
         val (left, right) = splitColumns(input)
 
