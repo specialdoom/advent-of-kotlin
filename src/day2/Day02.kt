@@ -37,7 +37,7 @@ fun main() {
     fun canBeTolerated(differences: List<Long>): Boolean {
         val levels = differences.count{diff -> !isSafe(diff)}
 
-        return levels < 2;
+        return levels < 2
     }
 
     fun computeSafety(list: List<Long>): Boolean {
@@ -85,7 +85,7 @@ fun main() {
             }
         }
 
-        return safe && (isUp || isDown);
+        return safe && (isUp || isDown)
     }
 
     // BASICALLY SAME AS MY INITIAL APPROACH BUT FUNCTIONAL
@@ -109,9 +109,9 @@ fun main() {
             line.split(" ").map{it.toInt()}
         }
 
-        val result = numbers.count(::isLineSafe);
-        val resultFunctional = numbers.count(::isLineSafeFunctional);
-        val resultToleratedFunctional = isLineSafeToleratedFunctional(numbers);
+        val result = numbers.count(::isLineSafe)
+        val resultFunctional = numbers.count(::isLineSafeFunctional)
+        val resultToleratedFunctional = isLineSafeToleratedFunctional(numbers)
 
         println("----- BEFORE LIVE -----")
         println("Computed reports: ${numbers.count()}")
