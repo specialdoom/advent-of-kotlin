@@ -1,6 +1,7 @@
 package day2
 
 import readInput
+import kotlin.math.absoluteValue
 
 fun main() {
     val input = readInput("day2/Day02")
@@ -55,12 +56,71 @@ fun main() {
         val reportDifferences = reports.map{report -> computeDifferences(report)}
         val number = computeSafetyWithToleration(reportDifferences)
         val result = reports.map{report -> computeSafety(report)}.count{report -> report}
+        println("----- BEFORE LIVE -----")
         println("Computed reports: ${reports.count()}")
         println("Safe reports: $result")
         println("Toleratable reports: $number")
+        println("----- BEFORE LIVE -----")
     }
-
 
     beforeLiveApproach(input)
 
+    // AFTER LIVE APPROACH
+
+    fun isLineSafe(numbers: List<Int>): Boolean {
+        var safe = true
+        var isUp = true
+        var isDown = true
+        for (i in 0..numbers.lastIndex - 1) {
+            val a = numbers[i]
+            val b = numbers[i+1]
+            safe = safe && ((a-b).absoluteValue <= 3)
+            when {
+                a < b -> isDown = false
+                b < a -> isUp = false
+                else -> {
+                    isUp = false
+                    isDown = false
+                }
+            }
+        }
+
+        return safe && (isUp || isDown);
+    }
+
+    // BASICALLY SAME AS MY INITIAL APPROACH BUT FUNCTIONAL
+    fun isLineSafeFunctional(numbers: List<Int>): Boolean {
+        val differences = numbers.zipWithNext{a, b -> a -b}
+        return differences.all{it in -3..3} && (differences.all {it> 0} || differences.all{it < 0})
+    }
+
+    fun isLineSafeToleratedFunctional(input: List<List<Int>>): Int {
+        return input.count{numbers ->
+            numbers.indices.any{
+                val skipped = numbers.toMutableList().apply{removeAt(it)}
+                isLineSafeFunctional(skipped)
+            }
+        }
+    }
+
+
+    fun afterLiveApproach(input: List<String>) {
+        val numbers = input.map{ line ->
+            line.split(" ").map{it.toInt()}
+        }
+
+        val result = numbers.count(::isLineSafe);
+        val resultFunctional = numbers.count(::isLineSafeFunctional);
+        val resultToleratedFunctional = isLineSafeToleratedFunctional(numbers);
+
+        println("----- BEFORE LIVE -----")
+        println("Computed reports: ${numbers.count()}")
+        println("Safe reports: $result")
+        println("Safe reports (functional): $resultFunctional")
+        println("Tolerated reports (functional): $resultToleratedFunctional")
+        println("----- BEFORE LIVE -----")
+    }
+
+
+    afterLiveApproach(input)
 }
